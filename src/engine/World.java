@@ -1,6 +1,7 @@
 package engine;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 public abstract class World extends Pane{
 	
@@ -123,10 +125,10 @@ public abstract class World extends Pane{
 		
 	}
 	
-	private class SceneListener implements ChangeListener<Number>{
+	private class SceneListener implements ChangeListener<Scene>{
 
 		@Override
-		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
 			// TODO Auto-generated method stub
 			if(newValue != null) {
 				requestFocus();

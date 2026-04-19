@@ -18,6 +18,7 @@ public abstract class World extends Pane{
 	private boolean heightInit;
 	private boolean dimensionInit;
 	public World() {
+		pressed = new HashSet<>();
 		widthInit = false;
 		heightInit = false;
 		dimensionInit = false;
@@ -26,6 +27,7 @@ public abstract class World extends Pane{
 		heightProperty().addListener(new HeightListener());
 		setOnKeyPressed(e -> pressed.add(e.getCode()));
 		setOnKeyReleased(e-> pressed.remove(e.getCode()));
+		sceneProperty().addListener(new SceneListener());
 		myTimer = new GameTimer();
 		
 	}
@@ -37,11 +39,12 @@ public abstract class World extends Pane{
 		myTimer.stop();
 		stop = true;
 	}
-	public boolean isStop() {
+	public boolean isStopped() {
 		return stop;
 	}
 	public void add(Actor actor) {
 		getChildren().add(actor);
+		actor.addedToWorld();
 		
 	}
 	public void remove(Actor actor) {
@@ -131,7 +134,7 @@ public abstract class World extends Pane{
 		}
 		
 	}
-
+	public abstract void act(long now);
 	protected abstract void onDimensionsInitialized();
 	
 }

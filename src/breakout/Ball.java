@@ -12,7 +12,17 @@ public class Ball extends Actor{
 	@Override
 	public void act(long now) {
 		// TODO Auto-generated method stub
-		
+		move(dx,dy);
+		if(getX() <= 0) {
+			dx = -dx;
+		}else if(getX() + getWidth() >= getWorld().getWidth()) {
+			dx = -dx;
+		}
+		if(getY() <= 0) {
+			dy = -dy;
+		}else if(getY() + getHeight() >= getWorld().getHeight()) {
+			dy = -dy;
+		}
 	}
 
 }

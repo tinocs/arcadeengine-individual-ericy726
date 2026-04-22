@@ -17,6 +17,10 @@ public class BallWorld extends World{
 		ball.setX(getWidth() / 2 - ball.getWidth() / 2);
 		ball.setY(getHeight() / 2 - ball.getHeight() / 2);
 		add(ball);
+		Paddle pad = new Paddle();
+		pad.setX(getWidth() / 3);
+		pad.setY(getHeight() / 4);
+		add(pad);
 		start();
 	}
 

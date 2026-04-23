@@ -28,23 +28,25 @@ public class Ball extends Actor{
 			dy = -dy;
 		}
 		Brick brick = getOneIntersectingObject(Brick.class);
-		boolean leftR = false;;
-		boolean topB = false;;
-		if(getX() >= brick.getX() && getX() + getWidth() <= brick.getX() + brick.getWidth()) {
-			leftR = true;
+		if(brick != null) {
+			boolean leftR = false;;
+			boolean topB = false;;
+			if(getX() >= brick.getX() && getX() + getWidth() <= brick.getX() + brick.getWidth()) {
+				leftR = true;
+			}
+			if(getY() >= brick.getY() && getY() + getHeight() <= brick.getY() + brick.getHeight()) {
+				topB = true;
+			}
+			if(leftR == true) {
+				dy = - dy;
+			}else if (topB == true) {
+				dx = -dx;
+			}else {
+				dy = -dy;
+				dx = -dx;
+			}
+			getWorld().remove(brick);
 		}
-		if(getY() >= brick.getY() && getY() + getHeight() <= brick.getY() + brick.getHeight()) {
-			topB = true;
-		}
-		if(leftR == true) {
-			dy = - dy;
-		}else if (topB == true) {
-			dx = -dx;
-		}else {
-			dy = -dy;
-			dx = -dx;
-		}
-		getWorld().remove(brick);
 		BallWorld bw = (BallWorld) getWorld();
 		bw.getScore().setScore(bw.getScore().getScore() + 100);
 	}

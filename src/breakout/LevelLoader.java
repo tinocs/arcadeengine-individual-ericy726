@@ -1,18 +1,17 @@
 package breakout;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 public class LevelLoader {
 	public static void load(BallWorld world, int lvl) {
-		String fileName = "/arcadeengine-individual-ericy726/src/breakoutresources/level" + lvl + ".txt";
+		String fileName = "src/breakoutresources/level" + lvl + ".txt";
 		try {
 			File f = new File(fileName);
 			Scanner in = new Scanner(f);
 			int r = in.nextInt();
 			int c = in.nextInt();
-			double w = world.getWidth() / c;
-			double h = world.getHeight() / r;
+			double w = 50;
+			double h = 25;
 			for(int row = 0;row < r;row++) {
 				String nextLine = in.nextLine();
 				for(int col = 0;col < c;col++) {

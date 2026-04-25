@@ -4,13 +4,23 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 public class BallWorld extends World{
 	Score score;
+	int lvl;
 	public BallWorld() {
 		setPrefSize(1000,800);
+		lvl = 1;
 	}
 	@Override
 	public void act(long now) {
 		// TODO Auto-generated method stub
-		
+		if(getObjects(Brick.class).isEmpty() == true) {
+			lvl++;
+			if(lvl >= 3) {
+				this.stop();
+				Breakout.showTitle();
+			}else {
+				LevelLoader.load(this, lvl);
+			}
+		}
 	}
 
 	@Override
@@ -35,6 +45,7 @@ public class BallWorld extends World{
 		score.setX(100);
 		score.setY(100);
 		getChildren().add(score);
+		LevelLoader.load(this, lvl);
 		start();
 	}
 	public Score getScore() {

@@ -12,11 +12,19 @@ public class Paddle extends Actor{
 		if(getWorld().isKeyPressed(KeyCode.LEFT) == true) {
 			if(getX() > 0) {
 				move(-6,0);
+				if(getX() < getWorld().getWidth() /2) {
+					BallWorld wrld = (BallWorld)(this.getWorld());
+					wrld.scroll(-6);
+				}
 			}
 		}
 		if(getWorld().isKeyPressed(KeyCode.RIGHT) == true) {
 			if(getX() + getWidth() < getWorld().getWidth()) {
 				move(6,0);
+				if(getX() > getWorld().getWidth() / 2) {
+					BallWorld wrld = (BallWorld)(this.getWorld());
+					wrld.scroll(6);
+				}
 			}
 		}
 	}

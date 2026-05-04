@@ -26,9 +26,8 @@ public class BallWorld extends World{
 	Ball ball;
 	Image bg;
 	ImageView bgView;
-	Sound bounceSound;
-	Sound brickSound;
-	Sound lossSound;
+	Sound lose;
+	Sound win;
 	boolean paused;
 	javafx.scene.text.Text msg;
 	public BallWorld() {
@@ -49,7 +48,8 @@ public class BallWorld extends World{
 			lvl++;
 			if(lvl >= 3) {
 				this.stop();
-				Breakout.showTitle();
+				win.play();
+				Breakout.showWin();
 			}else {
 				LevelLoader.load(this, lvl);
 				paused = true;
@@ -64,7 +64,8 @@ public class BallWorld extends World{
 			livesLbl.setText("Lives: " + lives);
 			if(lives <= 0) {
 				this.stop();
-				Breakout.showTitle();
+				lose.play();
+				Breakout.showGameOver();
 				
 			}else {
 				paused = true;
@@ -79,7 +80,8 @@ public class BallWorld extends World{
 	@Override
 	protected void onDimensionsInitialized() {
 		// TODO Auto-generated method stub
-		
+		lose = new Sound("/breakoutresources/game_lost.wav");
+		win = new Sound("/breakoutresources/game_won.wav");
 		bg = new Image(getClass().getClassLoader()
 		        .getResource("breakoutresources/background.png").toString());
 		bgView = new ImageView(bg);

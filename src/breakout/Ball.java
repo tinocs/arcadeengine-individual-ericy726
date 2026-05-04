@@ -1,13 +1,27 @@
 package breakout;
 import engine.Actor;
+import engine.Sound;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.util.Duration;
 public class Ball extends Actor{
 	double dx;
 	double dy;
+	Sound bounceSound;
+	Sound brickSound;
+	Sound lossSound;
 	public Ball() {
 		setImage(new Image(getClass().getClassLoader().getResource("breakoutresources/ball.png").toString()));
-		dx = 4;
-		dy = 4;
+		dx = 2;
+		dy = 2;
+		bounceSound = new Sound("/breakoutresources/ball_bounce.wav");
+		brickSound = new Sound("/breakoutresources/brick_hit.wav");
+		lossSound = new Sound("/breakoutresources/lose_life.wav");
+		
 	}
 	@Override
 	public void act(long now) {
@@ -30,17 +44,22 @@ public class Ball extends Actor{
 		move(dx,dy);
 		if(getX() <= 0) {
 			dx = -dx;
+			bounceSound.play();
 		}else if(getX() + getWidth() >= getWorld().getWidth()) {
 			dx = -dx;
+			bounceSound.play();
 		}
 		if(getY() <= 0) {
 			dy = -dy;
+			bounceSound.play();
 		}else if(getY() + getHeight() >= getWorld().getHeight()) {
 			dy = -dy;
+			bounceSound.play();
 		}
 		Paddle pad = getOneIntersectingObject(Paddle.class);
 		if(pad != null) {
 			dy = -dy;
+			bounceSound.play();
 		}
 		Brick brick = getOneIntersectingObject(Brick.class);
 		if(brick != null) {
@@ -60,7 +79,24 @@ public class Ball extends Actor{
 				dy = -dy;
 				dx = -dx;
 			}
-			getWorld().remove(brick);
+			brickSound.play();
+			FadeTransition fader = new FadeTransition(Duration.millis(200), brick);
+			fader.setFromValue(1);
+			fader.setToValue(0);
+			ScaleTransition scaler = new ScaleTransition(Duration.millis(200),brick);
+			scaler.setFromX(1);
+			scaler.setToX(1.5);
+			scaler.setFromY(1);
+			scaler.setToY(1.5);
+			ParallelTransition pTrans = new ParallelTransition(fader,scaler);
+			pTrans.setOnFinished(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					getWorld().remove(brick);
+				}
+				
+			});
+			pTrans.play();
 			bw.getScore().setScore(bw.getScore().getScore() + 100);
 		}
 		

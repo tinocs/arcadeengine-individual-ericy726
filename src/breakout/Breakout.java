@@ -2,6 +2,9 @@ package breakout;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -17,6 +20,16 @@ public class Breakout extends Application {
 		primaryStage.setTitle("breakout");
 		showTitle();
 		primaryStage.show();
+	}
+	public static void showGameOver() {
+		Alert lose = new Alert(AlertType.INFORMATION, "You Lose!", ButtonType.OK);
+		lose.show();
+		Breakout.showTitle();
+	}
+	public static void showWin() {
+		Alert win = new Alert(AlertType.INFORMATION, "You Win!", ButtonType.OK);
+		win.show();
+		Breakout.showTitle();
 	}
 	public static void showTitle() {
 		TitleScreen screen = new TitleScreen();

@@ -2,10 +2,22 @@ package breakout;
 import engine.Actor;
 import engine.World;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import engine.Sound;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.ParallelTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
+
 public class BallWorld extends World{
 	Score score;
 	int lvl;
@@ -14,6 +26,11 @@ public class BallWorld extends World{
 	Ball ball;
 	Image bg;
 	ImageView bgView;
+	Sound bounceSound;
+	Sound brickSound;
+	Sound lossSound;
+	boolean paused;
+	javafx.scene.text.Text msg;
 	public BallWorld() {
 		setPrefSize(800,600);
 		lvl = 1;
@@ -21,6 +38,13 @@ public class BallWorld extends World{
 	@Override
 	public void act(long now) {
 		// TODO Auto-generated method stub
+		if(paused == true) {
+			if(isKeyPressed(KeyCode.SPACE)) {
+				paused = false;
+				getChildren().remove(msg);
+			}
+			return;
+		}
 		if(getObjects(Brick.class).isEmpty() == true) {
 			lvl++;
 			if(lvl >= 3) {
@@ -28,6 +52,26 @@ public class BallWorld extends World{
 				Breakout.showTitle();
 			}else {
 				LevelLoader.load(this, lvl);
+				paused = true;
+				msg = new javafx.scene.text.Text("press space to start level" + lvl);
+				msg.setX(getWidth() / 2);
+				msg.setY(getHeight() / 2);
+				getChildren().add(msg);
+			}
+		}
+		if(ball != null && ball.getY() >= getHeight() - ball.getHeight()) {
+			lives --;
+			livesLbl.setText("Lives: " + lives);
+			if(lives <= 0) {
+				this.stop();
+				Breakout.showTitle();
+				
+			}else {
+				paused = true;
+				msg = new javafx.scene.text.Text("press space to continue");
+				msg.setX(getWidth() / 2);
+				msg.setY(getHeight() / 2);
+				getChildren().add(msg);
 			}
 		}
 	}
@@ -35,6 +79,7 @@ public class BallWorld extends World{
 	@Override
 	protected void onDimensionsInitialized() {
 		// TODO Auto-generated method stub
+		
 		bg = new Image(getClass().getClassLoader()
 		        .getResource("breakoutresources/background.png").toString());
 		bgView = new ImageView(bg);
@@ -43,6 +88,9 @@ public class BallWorld extends World{
 		getChildren().add(bgView);
 		lives = 3;
 		livesLbl = new Label("lives: " + lives);
+		livesLbl.setLayoutX(getWidth() - 200);
+		livesLbl.setLayoutY(75);
+		getChildren().add(livesLbl);
 		ball = new Ball();
 		ball.setX(getWidth() / 2 - ball.getWidth() / 2);
 		ball.setY(getHeight() / 2 - ball.getHeight() / 2);
@@ -62,20 +110,23 @@ public class BallWorld extends World{
 		score.setX(100);
 		score.setY(100);
 		getChildren().add(score);
+		paused = true;
+		msg = new javafx.scene.text.Text("press space to start");
+		msg.setX(getWidth() / 2);
+		msg.setY(getHeight() / 2);
+		getChildren().add(msg);
 		LevelLoader.load(this, lvl);
 		start();
-	}
-	public void livesAct() {
-		if(ball != null) {
-			if(ball.getY() >= this.getHeight() - ball.getHeight() / 2) {
-				
-			}
-		}
 	}
 	public Score getScore() {
 		return score;
 	}
-	
+	public boolean isPaused() {
+		return paused;
+	}
+	public void setPaused(boolean pause) {
+		paused = pause;
+	}
 	public void scroll(double dx) {
 		// For now, only move the background by the OPPOSITE of dx.
 		// For example, if dx was 5 then you would move the background by -5.

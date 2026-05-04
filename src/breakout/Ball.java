@@ -11,6 +11,21 @@ public class Ball extends Actor{
 	}
 	@Override
 	public void act(long now) {
+		BallWorld bw = (BallWorld)(getWorld());
+		if(bw.paused == true) {
+			Paddle pad = getOneIntersectingObject(Paddle.class);
+			if(pad == null) {
+				java.util.List<Paddle> pads = getWorld().getObjects(Paddle.class);
+				if(!pads.isEmpty() == true) {
+					pad = pads.get(0);
+				}
+			}
+			if(pad != null) {
+				setX(pad.getX() + pad.getWidth() / 2 - getWidth() / 2);
+				setY(pad.getY() - getHeight() - 2);
+			}
+			return;
+		}
 		// TODO Auto-generated method stub
 		move(dx,dy);
 		if(getX() <= 0) {
@@ -28,7 +43,6 @@ public class Ball extends Actor{
 			dy = -dy;
 		}
 		Brick brick = getOneIntersectingObject(Brick.class);
-		BallWorld bw = (BallWorld) getWorld();
 		if(brick != null) {
 			boolean leftR = false;;
 			boolean topB = false;;

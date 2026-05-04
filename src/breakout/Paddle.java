@@ -9,6 +9,9 @@ public class Paddle extends Actor{
 	@Override
 	public void act(long now) {
 		// TODO Auto-generated method stub
+		if(((BallWorld)getWorld()).isPaused() == true) {
+			return;
+		}
 		if(getWorld().isKeyPressed(KeyCode.LEFT) == true) {
 			if(getX() > 0) {
 				move(-6,0);
